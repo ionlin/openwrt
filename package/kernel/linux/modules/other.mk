@@ -1109,7 +1109,7 @@ define KernelPackage/keys-encrypted
   SUBMENU:=$(OTHER_MENU)
   TITLE:=encrypted keys on kernel keyring
   DEPENDS:=@KERNEL_KEYS +kmod-crypto-cbc +kmod-crypto-hmac +kmod-crypto-rng \
-           +kmod-crypto-sha256 +kmod-keys-trusted
+		   +kmod-crypto-sha256 +kmod-keys-trusted
   KCONFIG:=CONFIG_ENCRYPTED_KEYS
   FILES:=$(LINUX_DIR)/security/keys/encrypted-keys/encrypted-keys.ko
   AUTOLOAD:=$(call AutoLoad,01,encrypted-keys,1)
@@ -1129,11 +1129,10 @@ $(eval $(call KernelPackage,keys-encrypted))
 define KernelPackage/keys-trusted
   SUBMENU:=$(OTHER_MENU)
   TITLE:=TPM trusted keys on kernel keyring
-  DEPENDS:=@KERNEL_KEYS +kmod-crypto-hash +kmod-crypto-hmac +kmod-crypto-sha1 +kmod-tpm
+  DEPENDS:=@KERNEL_KEYS +kmod-crypto-hash +kmod-crypto-hmac +kmod-crypto-sha1 \
+		   +(LINUX_5_15):kmod-asn1-encoder +kmod-tpm
   KCONFIG:=CONFIG_TRUSTED_KEYS
-  FILES:= \
-	  $(LINUX_DIR)/security/keys/trusted.ko@lt5.10 \
-	  $(LINUX_DIR)/security/keys/trusted-keys/trusted.ko@ge5.10
+  FILES:= $(LINUX_DIR)/security/keys/trusted-keys/trusted.ko
   AUTOLOAD:=$(call AutoLoad,01,trusted-keys,1)
 endef
 
@@ -1151,10 +1150,10 @@ $(eval $(call KernelPackage,keys-trusted))
 define KernelPackage/tpm
   SUBMENU:=$(OTHER_MENU)
   TITLE:=TPM Hardware Support
-  DEPENDS:= +kmod-random-core +(LINUX_5_15):kmod-asn1-decoder \
-	  +(LINUX_5_15):kmod-asn1-encoder +(LINUX_5_15):kmod-oid-registry
-  KCONFIG:= CONFIG_TCG_TPM
-  FILES:= $(LINUX_DIR)/drivers/char/tpm/tpm.ko
+  DEPENDS:=+kmod-random-core +(LINUX_5_15):kmod-asn1-decoder \
+		   +(LINUX_5_15):kmod-asn1-encoder +(LINUX_5_15):kmod-oid-registry
+  KCONFIG:=CONFIG_TCG_TPM
+  FILES:=$(LINUX_DIR)/drivers/char/tpm/tpm.ko
   AUTOLOAD:=$(call AutoLoad,10,tpm,1)
 endef
 
@@ -1167,8 +1166,8 @@ $(eval $(call KernelPackage,tpm))
 define KernelPackage/tpm-tis
   SUBMENU:=$(OTHER_MENU)
   TITLE:=TPM TIS 1.2 Interface / TPM 2.0 FIFO Interface
-	DEPENDS:= @TARGET_x86 +kmod-tpm
-  KCONFIG:= CONFIG_TCG_TIS
+  DEPENDS:=@TARGET_x86 +kmod-tpm
+  KCONFIG:=CONFIG_TCG_TIS
   FILES:= \
 	$(LINUX_DIR)/drivers/char/tpm/tpm_tis.ko \
 	$(LINUX_DIR)/drivers/char/tpm/tpm_tis_core.ko
@@ -1187,8 +1186,8 @@ $(eval $(call KernelPackage,tpm-tis))
 define KernelPackage/tpm-i2c-atmel
   SUBMENU:=$(OTHER_MENU)
   TITLE:=TPM I2C Atmel Support
-  DEPENDS:= +kmod-tpm +kmod-i2c-core
-  KCONFIG:= CONFIG_TCG_TIS_I2C_ATMEL
+  DEPENDS:=+kmod-tpm +kmod-i2c-core
+  KCONFIG:=CONFIG_TCG_TIS_I2C_ATMEL
   FILES:= $(LINUX_DIR)/drivers/char/tpm/tpm_i2c_atmel.ko
   AUTOLOAD:=$(call AutoLoad,40,tpm_i2c_atmel,1)
 endef
@@ -1201,9 +1200,9 @@ $(eval $(call KernelPackage,tpm-i2c-atmel))
 
 define KernelPackage/tpm-i2c-infineon
   SUBMENU:=$(OTHER_MENU)
-  TITLE:= TPM I2C Infineon driver
-  DEPENDS:= +kmod-tpm +kmod-i2c-core
-  KCONFIG:= CONFIG_TCG_TIS_I2C_INFINEON
+  TITLE:=TPM I2C Infineon driver
+  DEPENDS:=+kmod-tpm +kmod-i2c-core
+  KCONFIG:=CONFIG_TCG_TIS_I2C_INFINEON
   FILES:= $(LINUX_DIR)/drivers/char/tpm/tpm_i2c_infineon.ko
   AUTOLOAD:= $(call AutoLoad,40,tpm_i2c_infineon,1)
 endef
