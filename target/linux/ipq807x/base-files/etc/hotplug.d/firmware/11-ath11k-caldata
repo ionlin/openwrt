@@ -7,8 +7,9 @@
 board=$(board_name)
 
 case "$FIRMWARE" in
-"ath11k/IPQ8074/hw2.0/caldata.bin")
+"ath11k/IPQ8074/hw2.0/cal-ahb-c000000.wifi.bin")
 	case "$board" in
+	edgecore,eap102|\
 	edimax,cax1800|\
 	qnap,301w|\
 	redmi,ax6|\
@@ -18,7 +19,7 @@ case "$FIRMWARE" in
 		;;
 	esac
 	;;
-"ath11k/QCN9074/hw1.0/caldata.bin")
+"ath11k/QCN9074/hw1.0/cal-pci-0000:01:00.0.bin")
 	case "$board" in
 	xiaomi,ax9000)
 		caldata_extract "0:art" 0x26800 0x20000
